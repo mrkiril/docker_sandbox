@@ -1,0 +1,16 @@
+server {
+    listen      8000;
+    listen      [::]:8000;
+    server_name docker.localhost;
+    root /app/static/;
+    location / {
+        #try_files $uri /404.html;
+        proxy_pass http://docker.django:5000/;
+        proxy_set_header   Host             $host;
+        proxy_set_header   X-Real-IP        $remote_addr;
+    }
+
+    location ~ \.(gif|jpg|png)$ {
+        root /data/images;
+    }
+}

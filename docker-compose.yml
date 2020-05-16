@@ -1,0 +1,29 @@
+version: '3'
+services:
+ db:
+  build:
+   dockerfile: db.Dockerfile
+   context: ./db
+  environment:
+   - POSTGRES_USER=postgres
+   - POSTGRES_PASSWORD=postgres
+   - POSTGRES_DB=postgres
+  ports:
+   - '5432'
+  volumes:
+   - ./data/postgres:/var/lib/postgresql/data
+ 
+ web:
+  hostname: docker.localhost
+  build:
+   dockerfile: app.Dockerfile
+   context: ./app
+#  volumes:
+#   - ./app:/app
+  depends_on:
+   - db
+  ports:
+   - 8000:8000
+  extra_hosts:
+   - "docker.django:127.10.10.1"
+#  command: bash start_project.sh
